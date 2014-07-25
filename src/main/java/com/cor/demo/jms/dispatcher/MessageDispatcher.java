@@ -26,26 +26,36 @@ public class MessageDispatcher {
     private static Logger LOG = LoggerFactory.getLogger(MessageDispatcher.class);
     
     /** JMS Template. */
-    @Autowired
-    protected JmsTemplate jmsTemplate;
+//    @Autowired
+//    protected JmsTemplate jmsTemplateQueue;
 
+    @Autowired
+    protected JmsTemplate jmsTemplateTopic;
     /**
      * Send the objectMessage to the Broker and Queue defined in application.properties.
      * @param objectMessage Object Message
      */
     public void sendMessageObject(final Serializable objectMessage) {
         
-        LOG.info("Sending message " + objectMessage);
+//        LOG.info("Sending message " + objectMessage);
+//        
+//        jmsTemplate.send(new MessageCreator() {
+//
+//            public Message createMessage(Session session) throws JMSException {
+//                ObjectMessage message = session.createObjectMessage(objectMessage);
+//                return message;
+//            }
+//        });
+//        LOG.info("Message Sent to queue!"); 
         
-        jmsTemplate.send(new MessageCreator() {
+        jmsTemplateTopic.send(new MessageCreator() {
 
             public Message createMessage(Session session) throws JMSException {
                 ObjectMessage message = session.createObjectMessage(objectMessage);
                 return message;
             }
         });
-        
-        LOG.info("Message Sent!"); 
+        LOG.info("Message Sent to topic!"); 
 
     }
 

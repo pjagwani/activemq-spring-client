@@ -2,6 +2,9 @@ package com.cor.demo.jms;
 
 import java.io.Serializable;
 
+import javax.jms.JMSException;
+
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,8 +20,9 @@ public class StartDemo {
 
     /**
      * @param args
+     * @throws JMSException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JMSException {
 
         // Load spring config
         ApplicationContext appContext = new ClassPathXmlApplicationContext(new String[] { "application-context.xml" });

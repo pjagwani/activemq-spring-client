@@ -7,24 +7,42 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
 
 	<!-- A JMS connection factory for ActiveMQ -->
-	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-		p:brokerURL="${applicationProperties.broker.url}" />
+	<bean id="connectionFactoryOpenwire" class="org.apache.activemq.ActiveMQConnectionFactory"
+		p:brokerURL="${applicationProperties.broker.url.openwire}"
+		p:userName="${applicationProperties.broker.username}"
+		p:password="${applicationProperties.broker.password}"  />
 
+	<!-- A JMS connection factory for ActiveMQ -->
+	<bean id="connectionFactoryAmqp" class="org.apache.activemq.ActiveMQConnectionFactory"
+		p:brokerURL="${applicationProperties.broker.url.amqp}"
+		p:userName="${applicationProperties.broker.username}"
+		p:password="${applicationProperties.broker.password}"  />
 
 	<!-- A destination in ActiveMQ -->
-	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+	<bean id="destinationQueue" class="org.apache.activemq.command.ActiveMQQueue">
 		<!-- <constructor-arg value="XRayEventStreamQueue" /> -->
 		<constructor-arg value="${applicationProperties.broker.queue}" /> 
 	</bean>
+	
+	<!-- A destination in ActiveMQ -->
+	<bean id="destinationTopic" class="org.apache.activemq.command.ActiveMQTopic">
+		<!-- <constructor-arg value="XRayEventStreamQueue" /> -->
+		<constructor-arg value="${applicationProperties.broker.topic}" /> 
+	</bean>
 
 	<!-- A cached connection to wrap the ActiveMQ connection -->
-	<bean id="cachedConnectionFactory"
+	<bean id="cachedConnectionFactoryOpenwire"
 		class="org.springframework.jms.connection.CachingConnectionFactory"
-		p:targetConnectionFactory-ref="connectionFactory" p:sessionCacheSize="10" />
+		p:targetConnectionFactory-ref="connectionFactoryOpenwire" p:sessionCacheSize="10" />
 
 	<!-- A JmsTemplate instance that uses the cached connection and destination -->
-	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
-		p:connectionFactory-ref="cachedConnectionFactory"
-		p:defaultDestination-ref="destination" />
+	<bean id="jmsTemplateOpenwireQueue" class="org.springframework.jms.core.JmsTemplate"
+		p:connectionFactory-ref="cachedConnectionFactoryOpenwire"
+		p:defaultDestination-ref="destinationQueue" />
+		
+		!-- A JmsTemplate instance that uses the cached connection and destination -->
+	<bean id="jmsTemplateOpenwireTopic" class="org.springframework.jms.core.JmsTemplate"
+		p:connectionFactory-ref="cachedConnectionFactoryOpenwire"
+		p:defaultDestination-ref="destinationTopic" />
 
 </beans>
