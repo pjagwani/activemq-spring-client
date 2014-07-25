@@ -30,7 +30,7 @@ public class MessageDispatcher {
 //    protected JmsTemplate jmsTemplateQueue;
 
     @Autowired
-    protected JmsTemplate jmsTemplateTopic;
+    protected JmsTemplate jmsTemplateOpenwireTopic;
     /**
      * Send the objectMessage to the Broker and Queue defined in application.properties.
      * @param objectMessage Object Message
@@ -48,7 +48,7 @@ public class MessageDispatcher {
 //        });
 //        LOG.info("Message Sent to queue!"); 
         
-        jmsTemplateTopic.send(new MessageCreator() {
+        jmsTemplateOpenwireTopic.send(new MessageCreator() {
 
             public Message createMessage(Session session) throws JMSException {
                 ObjectMessage message = session.createObjectMessage(objectMessage);

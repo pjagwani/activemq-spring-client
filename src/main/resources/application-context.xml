@@ -23,13 +23,11 @@
 
 	<!-- A JMS connection factory for ActiveMQ -->
 	<bean id="connectionFactoryOpenwire" class="org.apache.activemq.ActiveMQConnectionFactory"
-		p:brokerURL="${applicationProperties.broker.url.openwire}" 
-		p:userName="${applicationProperties.broker.username}" 
+		p:brokerURL="${applicationProperties.broker.url.openwire}" p:userName="${applicationProperties.broker.username}"
 		p:password="${applicationProperties.broker.password}" />
 
 	<bean id="connectionFactoryAmqp" class="org.apache.activemq.ActiveMQConnectionFactory"
-		p:brokerURL="${applicationProperties.broker.url.amqp}" 
-		p:userName="${applicationProperties.broker.username}" 
+		p:brokerURL="${applicationProperties.broker.url.amqp}" p:userName="${applicationProperties.broker.username}"
 		p:password="${applicationProperties.broker.password}" />
 
 	<!-- A destination in ActiveMQ -->
@@ -47,20 +45,32 @@
 	<!-- A cached connection to wrap the ActiveMQ connection -->
 	<bean id="cachedConnectionFactoryOpenwire"
 		class="org.springframework.jms.connection.CachingConnectionFactory"
-		p:targetConnectionFactory-ref="connectionFactoryOpenwire" p:sessionCacheSize="10" />
+		p:targetConnectionFactory-ref="connectionFactoryOpenwire"
+		p:sessionCacheSize="10" />
 
 	<!-- A cached connection to wrap the ActiveMQ connection -->
 	<bean id="cachedConnectionFactoryAmqp"
 		class="org.springframework.jms.connection.CachingConnectionFactory"
-		p:targetConnectionFactory-ref="connectionFactoryAmqp" p:sessionCacheSize="10" />
-		
+		p:targetConnectionFactory-ref="connectionFactoryAmqp"
+		p:sessionCacheSize="10" />
+
 	<!-- A JmsTemplate instance that uses the cached connection and destination -->
-	<bean id="jmsTemplateQueue" class="org.springframework.jms.core.JmsTemplate"
+	<bean id="jmsTemplateOpenwireQueue" class="org.springframework.jms.core.JmsTemplate"
 		p:connectionFactory-ref="cachedConnectionFactoryOpenwire"
 		p:defaultDestination-ref="destinationQueue" />
 
-	<bean id="jmsTemplateTopic" class="org.springframework.jms.core.JmsTemplate"
+	<!-- A JmsTemplate instance that uses the cached connection and destination -->
+	<bean id="jmsTemplateOpenwireTopic" class="org.springframework.jms.core.JmsTemplate"
 		p:connectionFactory-ref="cachedConnectionFactoryOpenwire"
 		p:defaultDestination-ref="destinationTopic" />
 
+	<!-- A JmsTemplate instance that uses the cached connection and destination -->
+	<bean id="jmsTemplateAmqpQueue" class="org.springframework.jms.core.JmsTemplate"
+		p:connectionFactory-ref="cachedConnectionFactoryAmqp"
+		p:defaultDestination-ref="destinationQueue" />
+
+	<!-- A JmsTemplate instance that uses the cached connection and destination -->
+	<bean id="jmsTemplateAmqpTopic" class="org.springframework.jms.core.JmsTemplate"
+		p:connectionFactory-ref="cachedConnectionFactoryAmqp"
+		p:defaultDestination-ref="destinationTopic" />
 </beans>
